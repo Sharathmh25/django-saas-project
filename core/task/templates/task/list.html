@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #111827;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3;
+        }
+
+        .task-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .task-content {
+            max-width: 75%;
+        }
+
+        .task-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .task-desc {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .task-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-completed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .empty-state {
+            background: #ffffff;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 8px;
+            border: 1px dashed #d1d5db;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Tenant Tasks</h1>
+            <a href="{% url 'create_task' %}" class="btn btn-primary">+ Create New Task</a>
+        </div>
+        {% if tasks %}
+            {% for task in tasks %}
+                <div class="task-card">
+                    <div class="task-content">
+                        <div class="task-title">{{ task.title }}</div>
+                        <div class="task-desc">{{ task.description|linebreaksbr }}</div>
+                        <div class="task-meta">
+                            Created by: <strong>{{ task.created_by.username }}</strong>
+                        </div>
+                    </div>
+                    <div>
+                        {% if task.status == 'Done' %}
+                            <span class="badge badge-completed">Done</span>
+                        {% else %}
+                            <span class="badge badge-pending">Pending</span>
+                        {% endif %}
+                        <a href="{% url 'update_task' task.id %}">Edit</a>
+                        <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <p>No tasks found for your organization yet.</p>
+                <a href="{% url 'create_task' %}" class="btn btn-primary">Create First Task</a>
+            </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SaaS Platform{% endblock %}</title>
+    
+    <!-- Simple CSS Framework (Picocss for clean, responsive UI without extra overhead) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main.container {
+            flex: 1;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .alert {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+        }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error, .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <nav class="container-fluid">
+        <ul>
+            {% comment %} <li><strong><a href="{% url 'dashboard' %}">{% if user.is_authenticated %}{{ user.profile.tenant.name }}{% else %}SaaS App{% endif %}</a></strong></li> {% endcomment %}
+        </ul>
+        <ul>
+            {% if user.is_authenticated %}
+                <li><span>Welcome, {{ user.username }}</span></li>
+                {% comment %} <li><a href="{% url 'dashboard' %}" role="button" class="secondary">Dashboard</a></li> {% endcomment %}
+                <li><a href="{% url 'logout' %}" role="button" class="contrast">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}" role="button">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container">
+        
+        <!-- Django Flash Messages (Success / Error alerts) -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Child Page Content -->
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="container" style="text-align: center; font-size: 0.85rem; color: #666;">
+        <hr>
+        <p>&copy; {% now "Y" %} SaaS Platform. All rights reserved.</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

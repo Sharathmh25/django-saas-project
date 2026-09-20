@@ -1,0 +1,11 @@
+{% extends "account/base.html" %}
+{% block title %}Home Page{% endblock title %}
+{% block content %}
+<a href="{% url 'register' %}">Register</a>
+<a href="{% url 'login' %}">Login</a>
+<!-- Add a link to the tenant detail page -->
+{% comment %} <a href="{% url 'tenant_detail' pk=tenant.pk %}">Tenant Detail</a> {% endcomment %}
+<!-- Add a link to the task list page -->
+<a href="{% url 'task_list' %}">Task List</a>
+
+{% endblock content %}

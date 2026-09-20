@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Task</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; max-width: 500px; }
+        .form-group { margin-bottom: 15px; }
+        .btn { padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-cancel { color: #555; margin-left: 10px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Update Task: {{ task.title }}</h2>
+
+    <form method="POST">
+        <!-- CRITICAL: Protects against Cross-Site Request Forgery -->
+        {% csrf_token %} 
+        
+        <!-- Renders form fields (like title, description, etc.) safely -->
+        {{ form.as_p }}
+
+        <button type="submit" class="btn">Save Changes</button>
+        <a href="{% url 'task_list' %}" class="btn-cancel">Cancel</a>
+    </form>
+
+</body>
+</html>
