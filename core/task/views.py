@@ -25,7 +25,7 @@ def create_task(request):
 def task_list(request):
     if request.user.tenant is None:
         return redirect('create_tenant')
-    tasks=Task.objects.filter(tenant=request.user.tenant)
+    tasks=Task.objects.select_related('tenant').filter(tenant=request.user.tenant)
     return render(request, 'task/list.html', {'tasks': tasks})
 
 

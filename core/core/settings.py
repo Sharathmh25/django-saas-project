@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'account',
     'tenant',
     'task',
-    'django_extensions',
+    'django_extensions','rest_framework'
 ]
 AUTH_USER_MODEL = 'account.User'
 MIDDLEWARE = [
